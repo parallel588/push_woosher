@@ -11,6 +11,9 @@ module PushWoosher
         faraday.request :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter Faraday.default_adapter  # make requests with Net::HTTP
+        faraday.request :retry, max: 2, interval: 0.05,
+                        interval_randomness: 0.5, backoff_factor: 2,
+                        exceptions: ['Timeout::Error']
       end
     end
 
